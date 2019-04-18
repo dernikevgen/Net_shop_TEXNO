@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="static/js/jquery.js"></script>
+<div class="row">
+    {% for info in infos %}
+    <div class="col-sm-4 col-lg-4 col-md-4">
+        <div class="thumbnail">
+            <img src="{{ info.image.url }}" alt="" style='width:auto; height:250px;'>
+            <div class="caption">
+                <h5>
+                    <strong>
+                        <hr>
+                        <p class=" lead text-center"><a href="#" class="text-center">{{ info.title }}</a></p>
+                    </strong>
+                </h5>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

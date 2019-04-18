@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="static/js/jquery.js"></script>
+<div class="col-sm-12">
+    <h2>{{ category.name }} </h2>
+    <hr>
+    {% for product in product_of_category %}
+    <div class="col-sm-4">
+        <img src="{{ product.image.url }}" style="width:auto; height:350px;">
+        <p class=" lead text-center">
+            <a href="{{ product.get_absolute_url }}" class="text-center">{{ product.title }}</a>
+        </p>
+        <p class="text-center" style="font-size:18px;"> Цена: {{ product.price }}</p>
+        <p class="text-center"><a href="#" class="text-center"><button class="btn-danger">Добавить в корзину</button></a></p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

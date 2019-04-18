@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="static/js/jquery.js"></script>
+<div class="row">
+    {% for brand in brands %}
+    <div class="col-sm-4 col-lg-4 col-md-4">
+        <div class="thumbnail">
+            <img src="{{ brand.image.url }}" alt="" style='width:auto; height:250px;'>
+            <div class="caption">
+                <h5>
+                    <strong>
+                        <hr>
+                        <p class=" lead text-center">
+                            <a href="{{ brand.get_absolute_url }}" class="text-center">{{ brand.name }}</a>
+                        </p>
+                    </strong>
+                </h5>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>T E X N O</title>
+
+    <link rel='stylesheet' type="text/css" href="/static/css/bootstrap.css">
+    <link rel='stylesheet' href="/static/css/shop-homepage.css">
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="http://code.jquery.com/jquery.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'base'  %}">На главную</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        {% if not request.get_full_path == '/' %}
+                        {% if not request.get_full_path == '/category_ever/' %}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">Категории<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'category_ever' %}">Все категории</a></li>
+                            {% for category in categories %}
+                            {% if not request.get_full_path == category.get_absolute_url %}
+                            <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endif %}
+                    </li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">Товары<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            {% if not request.get_full_path == '/brand_ever/' %}
+                            <li><a href="{% url 'brand_ever' %}">Все бренды</a></li>
+                            {% endif %}
+                            {% for brand in brands %}
+                            {% if not request.get_full_path == brand.get_absolute_url %}
+                            <li><a href="{{ brand.get_absolute_url }}">{{ brand.name }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">Сервис<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            {% if not request.get_full_path == '/repairs/' %}
+                            <li><a href="{% url 'repairs' %}">Ремонт техники</a></li>
+                            {% endif %}
+                            <li><a href="#">Доставка</a> </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        {% if not request.get_full_path == '/asker_1/' %}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">Вопросы<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'asker_1' %}">{{ askers }}</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+                    <li class="dropdown">
+                        {% if not request.get_full_path == '/target/' %}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">О портале<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'target' %}">{{ inf_infs }}</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+                    <a class="navbar-brand"  href="http://127.0.0.1:8000/admin">Админка</a>
+                </ul>
+                <ul class="lead nav navbar-nav navbar-right">
+                    <li><a href="#">Корзина<span class="badge">Кол-во единц</span></a> </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        <div class="row">
+            <div class="col-md-3">
+                <p class="lead">T E X N O</p>
+                <p class="list-group-item">
+                    <a href="{% url 'category_ever' %}">Все категории</a>
+                </p>
+                <hr>
+                {% for category in categories %}
+                <div class="list-group">
+                    <a href="{{ category.get_absolute_url }}" class="list-group-item">{{ category.name }}</a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-9">
+                <div class="row carousel-holder">
+                    <div class="col-md-12">
+                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                {% for image in images %}
+                                    {% if forloop.first %}
+                                        <div class="item active">
+                                            <img class="slide-image" src="{{ image.image.url }}"
+                                                 alt="" style= 'padding-left:auto; height:80%;'>
+                                        </div>
+                                    {% else %}
+                                        <div class="item">
+                                            <img class="slide-image" src="{{ image.image.url }}"
+                                                 alt="" style= 'padding-left:auto;  height:80%'>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev" style="background: transparent;">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </a>
+                            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next" style="background: transparent;">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <p class="lead text-center">Лидеры продаж</p>
+                    <hr>
+                    {% for product in products %}
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="{{ product.image.url }}" alt="" style='width:auto; height:250px;'>
+                            <div class="caption">
+                                <h4 class="pull-right">{{ product.price}} руб
+                                </h4>
+                                <h5>
+                                    <strong>
+                                        <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                                    </strong>
+                                </h5>
+                                <p>{{ product.description}}</p>
+                            </div>
+                                    <p class="text-center">
+                                        <a href="#"  class="text-center" >
+                                            <button class="btn-danger">Добавить в корзину</button>
+                                        </a>
+                                    </p>
+                            <hr>
+                            <div class="ratings">
+                                <p class="pull-right">15 reviews</p>
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+                    <div class="col-sm-4 col-lg-4 col-md-4 navbar-right">
+                        <h4>
+                            <a>Нравится ?</a>
+                        </h4>
+                        <p>Можно найти больше! Нажми
+                            <a target="_blank" href="https://5element.by/">эту </a>кнопку и попадёшь к отцу основателю этого сайта
+                        </p>
+                        <a class="btn btn-primary" target="_blank" href="https://baraholka.onliner.by/">Альтернативный вариант
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock content %}
+    </div>
+    <div class="container">
+        <hr>
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p> &copy; I am builds 2019</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="static/js/jquery.js"></script>
+</body>
+
+</html>
