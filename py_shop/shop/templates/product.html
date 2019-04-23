@@ -12,7 +12,7 @@
     <p class="text-center" >В наличии на складе: {{ product.stock }}</p>
     <hr>
     <p class="text-center">
-        <a href="#"  data-slug="{{ product.slug }}" class="text-center" >
+        <a href="{% url 'CartAdd' product.id %}" method="post" class="text-center" >
             <button class="btn-danger">Добавить в корзину</button>
         </a>
     </p>

@@ -1,5 +1,7 @@
-from django.shortcuts import render
+
+from django.shortcuts import render, get_object_or_404, render_to_response
 from shop.models import ThemeFront, Product, Category, Info, Asker, Brand
+from cart.forms import CartAddProductForm
 
 
 def base_view(request):
@@ -22,8 +24,10 @@ def base_view(request):
     return render(request, 'base.html', context=context)
 
 
-def product_view(request, product_slug):
+def product_view(request, product_slug, id, slug):
     product = Product.objects.get(slug=product_slug)
+    cart_product_form = CartAddProductForm()
+    producted = get_object_or_404(Product, id=id, slug=slug, available=True)
     categories = Category.objects.all()
     products = Product.objects.all()
     infos = Info.objects.all()
@@ -33,6 +37,8 @@ def product_view(request, product_slug):
     context = {
         'products': products,
         'product': product,
+        'producted': producted,
+        'cart_product_form': cart_product_form,
         'infos': infos,
         'askers': askers,
         'brands': brands,
@@ -178,17 +184,7 @@ def target_view(request):
     return render(request, 'target.html', context=context)
 
 
-def cart_view(request):
-    categories = Category.objects.all()
-    infos = Info.objects.all()
-    brands = Brand.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    context = {
-        'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
-    }
-    return render(request, 'cart.html', context=context)
+
+
+
+

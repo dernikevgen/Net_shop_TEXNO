@@ -100,7 +100,11 @@
                     <a class="navbar-brand"  href="http://127.0.0.1:8000/admin">Админка</a>
                 </ul>
                 <ul class="lead nav navbar-nav navbar-right">
-                    <li><a href="{% url 'cart' %}">Корзина<span class="badge">Кол-во единц</span></a> </li>
+                    {% if not request.user.is_authenticated %}
+                        <li><a href="#"><font  color="white">Войти</font></a> </li>
+                    {% else %}
+                        <li><a href="{% url 'CartDetail' %}">Корзина<span class="badge">0</span></a> </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

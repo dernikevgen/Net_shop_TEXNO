@@ -1,6 +1,7 @@
 from django.db import models
 from autoslug import AutoSlugField
 from django.urls import reverse
+from decimal import Decimal
 
 
 def image_folder(instance, filename):
@@ -62,6 +63,12 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
     priority = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['title']
+        index_together = [
+            ['id', 'slug']
+        ]
+
     def __str__(self):
         return self.title
 
@@ -97,6 +104,11 @@ class Asker(models.Model):
 
     def get_absolute_url(self):
         return reverse('asker_detail', kwargs={'asker_slug': self.slug})
+
+
+
+
+
 
 
 
