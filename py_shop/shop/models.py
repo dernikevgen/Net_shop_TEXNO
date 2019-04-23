@@ -24,6 +24,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from='name')
     image = models.ImageField(upload_to=image_folder, blank=True)
+    priority = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -37,6 +38,7 @@ class Brand(models.Model):
     name = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from='name')
     image = models.ImageField(upload_to=image_folder, blank=True)
+    priority = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -58,6 +60,7 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(verbose_name='На складе')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    priority = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -72,6 +75,7 @@ class Info(models.Model):
     slug = AutoSlugField(populate_from='title')
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to=image_folder, blank=True)
+    priority = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -86,6 +90,7 @@ class Asker(models.Model):
     slug = AutoSlugField(populate_from='title')
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to=image_folder, blank=True)
+    priority = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

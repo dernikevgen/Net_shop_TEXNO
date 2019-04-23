@@ -7,9 +7,9 @@ def base_view(request):
     products = Product.objects.all()
     images = ThemeFront.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'categories': categories,
         'products': products,
@@ -27,9 +27,9 @@ def product_view(request, product_slug):
     categories = Category.objects.all()
     products = Product.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'products': products,
         'product': product,
@@ -48,9 +48,9 @@ def category_view(request, category_slug):
     products = Product.objects.all()
     categories = Category.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'product_of_category': product_of_category,
         'infos': infos,
@@ -66,9 +66,9 @@ def category_view(request, category_slug):
 def category_all_view(request):
     categories = Category.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'infos': infos,
         'askers': askers,
@@ -82,9 +82,9 @@ def category_all_view(request):
 def brand_view(request):
     categories = Category.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'categories': categories,
         'infos': infos,
@@ -100,9 +100,9 @@ def brand_one_view(request, brand_slug):
     product_of_brand = Product.objects.filter(brand=brand)
     categories = Category.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'product_of_brand': product_of_brand,
         'categories': categories,
@@ -117,9 +117,9 @@ def brand_one_view(request, brand_slug):
 def repairs_view(request):
     categories = Category.objects.all()
     infos = Info.objects.all()
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
     context = {
         'categories': categories,
         'infos': infos,
@@ -130,25 +130,44 @@ def repairs_view(request):
     return render(request, 'repairs.html', context=context)
 
 
-def asker_view(request):
+def asker_view_one(request):
     categories = Category.objects.all()
     infos = Info.objects.all()
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
+    inf_infs = Asker.objects.filter(priority=False)
+    askers = Asker.objects.filter(priority=True)
     context = {
         'categories': categories,
         'infos': infos,
         'brands': brands,
         'inf_infs': inf_infs,
+        'askers': askers,
     }
     return render(request, 'asker_1.html', context=context)
+
+
+def asker_view_two(request):
+    categories = Category.objects.all()
+    infos = Info.objects.all()
+    brands = Brand.objects.all()
+    inf_infs = Asker.objects.filter(priority=False)
+    askers = Asker.objects.filter(priority=True)
+    context = {
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+    }
+    return render(request, 'asker_2.html', context=context)
+
 
 def target_view(request):
     categories = Category.objects.all()
     infos = Info.objects.all()
     brands = Brand.objects.all()
-    inf_infs = Asker.objects.all()[1]
-    askers = Asker.objects.all()[0]
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     context = {
         'categories': categories,
         'infos': infos,
@@ -160,7 +179,16 @@ def target_view(request):
 
 
 def cart_view(request):
+    categories = Category.objects.all()
+    infos = Info.objects.all()
+    brands = Brand.objects.all()
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
     context = {
-
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
     }
-    return render(request, 'cat.html', context=context)
+    return render(request, 'cart.html', context=context)

@@ -8,9 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>T E X N O</title>
-
     <link rel='stylesheet' type="text/css" href="/static/css/bootstrap.css">
     <link rel='stylesheet' href="/static/css/shop-homepage.css">
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -72,6 +70,7 @@
                             <li><a href="{% url 'repairs' %}">Ремонт техники</a></li>
                             {% endif %}
                             <li><a href="#">Доставка</a> </li>
+                            <li><a href="#">Возрат товара</a> </li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -80,7 +79,9 @@
                        aria-haspopup="true" aria-expanded="false">Вопросы<span class="caret"></span>
                     </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'asker_1' %}">{{ askers }}</a></li>
+                            {% for asker in askers %}
+                            <li><a href="{% url 'asker_1' %}">{{ asker }}</a></li>
+                            {% endfor %}
                         </ul>
                         {% endif %}
                     </li>
@@ -90,19 +91,20 @@
                        aria-haspopup="true" aria-expanded="false">О портале<span class="caret"></span>
                     </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'target' %}">{{ inf_infs }}</a></li>
+                            {% for inf_inf in inf_infs %}
+                            <li><a href="{% url 'target' %}">{{ inf_inf }}</a></li>
+                            {% endfor %}
                         </ul>
                         {% endif %}
                     </li>
                     <a class="navbar-brand"  href="http://127.0.0.1:8000/admin">Админка</a>
                 </ul>
                 <ul class="lead nav navbar-nav navbar-right">
-                    <li><a href="#">Корзина<span class="badge">Кол-во единц</span></a> </li>
+                    <li><a href="{% url 'cart' %}">Корзина<span class="badge">Кол-во единц</span></a> </li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container">
         {% block content %}
         <div class="row">
@@ -160,8 +162,7 @@
                         <div class="thumbnail">
                             <img src="{{ product.image.url }}" alt="" style='width:auto; height:250px;'>
                             <div class="caption">
-                                <h4 class="pull-right">{{ product.price}} руб
-                                </h4>
+                                <h4 class="pull-right">{{ product.price}} руб</h4>
                                 <h5>
                                     <strong>
                                         <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
@@ -174,7 +175,7 @@
                                             <button class="btn-danger">Добавить в корзину</button>
                                         </a>
                                     </p>
-                            <hr>
+                                <hr>
                             <div class="ratings">
                                 <p class="pull-right">15 reviews</p>
                                 <p>
@@ -192,9 +193,7 @@
                         <hr>
                     </div>
                     <div class="col-sm-4 col-lg-4 col-md-4 navbar-right">
-                        <h4>
-                            <a>Нравится ?</a>
-                        </h4>
+                        <h4><a>Нравится?</a></h4>
                         <p>Можно найти больше! Нажми
                             <a target="_blank" href="https://5element.by/">эту </a>кнопку и попадёшь к отцу основателю этого сайта
                         </p>

@@ -8,7 +8,8 @@
 <div class="cil-sm-8">
     <h3 class="text-center"> {{ product.title }}</h3>
     <p class="text-center" style="font-size:18px;"> Цена: {{ product.price }}</p>
-    <p class="text-center" >{{ product.description }} </p>
+    <p class="text-center" >{{ product.description }}</p>
+    <p class="text-center" >В наличии на складе: {{ product.stock }}</p>
     <hr>
     <p class="text-center">
         <a href="#"  data-slug="{{ product.slug }}" class="text-center" >

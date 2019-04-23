@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="static/js/jquery.js"></script>
+<h3 class="text-center">Корзина</h3>
+<table class="table">
+    <tr>
+        <th>Изображение</th>
+        <th>Товар</th>
+        <th>Кол-во</th>
+        <th>Цена</th>
+        <th>Полная цена</th>
+        <th>Удалить</th>
+      </tr>
+    {% for items in cart.items.all %}
+    <tr>
+        <tbody>
+        <td class="text-center">{{ items.product.title }}</td>
+        <td class="text-center">
+            <form action="" method="GET">
+                <input type="number" name="cart_total" class="cart-items-cart_total" data-id="{{ items.id }}"
+                       value="{{ items.cart_total }}" min='1' style='width: 80px;'>
+            </form>
+        </td>
+        <td class="text-center">{{ items.item_total }}</td>
+        <td class="text-center">
+            <a href="{% url 'remove_cart_view' product_slug=items.product.slug %}">
+            <button class="btn-danger">Удалить из корзины</button>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
