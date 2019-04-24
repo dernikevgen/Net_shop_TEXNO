@@ -48,7 +48,7 @@ class Cart:
             yield item
 
     def __len__(self):
-        '''Количество товаров'''
+        '''Колл-во товаров'''
         return sum(item['quantity'] for item in self.cart.values())
 
     def get_total_price(self):

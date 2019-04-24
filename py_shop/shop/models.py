@@ -76,6 +76,7 @@ class Product(models.Model):
         return reverse('product_detail', kwargs={'product_slug': self.slug})
 
 
+
 class Info(models.Model):
 
     title = models.CharField(max_length=100)

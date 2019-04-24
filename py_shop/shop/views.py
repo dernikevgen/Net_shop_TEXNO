@@ -1,8 +1,6 @@
-
 from django.shortcuts import render, get_object_or_404, render_to_response
 from shop.models import ThemeFront, Product, Category, Info, Asker, Brand
-from cart.forms import CartAddProductForm
-
+from cart.cart import
 
 def base_view(request):
     categories = Category.objects.all()
@@ -24,10 +22,8 @@ def base_view(request):
     return render(request, 'base.html', context=context)
 
 
-def product_view(request, product_slug, id, slug):
+def product_view(request, product_slug):
     product = Product.objects.get(slug=product_slug)
-    cart_product_form = CartAddProductForm()
-    producted = get_object_or_404(Product, id=id, slug=slug, available=True)
     categories = Category.objects.all()
     products = Product.objects.all()
     infos = Info.objects.all()
@@ -37,8 +33,6 @@ def product_view(request, product_slug, id, slug):
     context = {
         'products': products,
         'product': product,
-        'producted': producted,
-        'cart_product_form': cart_product_form,
         'infos': infos,
         'askers': askers,
         'brands': brands,
@@ -182,6 +176,7 @@ def target_view(request):
         'askers': askers,
     }
     return render(request, 'target.html', context=context)
+
 
 
 

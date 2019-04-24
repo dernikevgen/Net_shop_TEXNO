@@ -27,4 +27,5 @@ def CartRemove(request, product_id):
 
 def CartDetail(request):
     cart = Cart(request)
-    return render(request, 'detail.html', {'cart': cart})
+    context = {'cart': cart}
+    return render(request, 'detail.html', context=context)
