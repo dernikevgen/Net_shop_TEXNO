@@ -103,7 +103,7 @@
                     {% if not request.user.is_authenticated %}
                         <li><a href="#"><font  color="white">Войти</font></a> </li>
                     {% else %}
-                        <li><a href="{% url 'CartDetail' %}">Корзина<span class="badge">0</span></a> </li>
+                        <li><a href="{% url 'cart' %}">Корзина<span class="badge">{{ cart.items.count }}</span></a> </li>
                     {% endif %}
                 </ul>
             </div>
@@ -175,7 +175,7 @@
                                 <p>{{ product.description}}</p>
                             </div>
                                     <p class="text-center">
-                                        <a href="{% url 'CartAdd' product.id %}" method="post"   class="text-center" >
+                                        <a href="{% url 'add_to_cart' product_slug=product.slug %}" method="post"   class="text-center" >
                                             <button class="btn-danger">Добавить в корзину</button>
                                         </a>
                                     </p>

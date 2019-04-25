@@ -2,8 +2,9 @@
 {% load static %}
 {% block content %}
 <script src="static/js/jquery.js"></script>
-<h3 class="text-center">Корзина</h3>
+<h1 class="text-center">Корзина</h1>
 <table class="table">
+    <thead>
     <tr>
         <th>Изображение</th>
         <th>Товар</th>
@@ -11,25 +12,36 @@
         <th>Цена</th>
         <th>Итоговая цена</th>
         <th>Удалить</th>
-      </tr>
-    {% for items in cart.items.all %}
-    <tr>
+    </tr>
+    </thead>
+    {% for item in cart.items.all %}
         <tbody>
-            <td class="text-center">{{ items.product.title }}</td>
+        <tr>
+           <tr>
             <td class="text-center">
-                <form action="" method="GET">
-                    <input type="number" name="cart_total" class="cart-items-cart_total" data-id="{{ items.id }}"
-                       value="{{ items.cart_total }}" min='1' style='width: 80px;'>
+                <img src="{{ item.product.image.url }}" alt="" style='padding-left:auto; height:40%;'/>
+            </td>
+            <td class="text-left">
+                <a href="{{ product.get_absolute_url }}">{{ item.product.title }}</a>
+            </td>
+            <td class="text-center">
+                <form method="post" >
+                    {{ item.qty }}
+                    <input  type="number"  name="cart_total" class="cart-items-cart_total" data-id="{{ items.id }}"
+                           value="{{ items.item_total }}"  min='1' style='width: 80px;'>
                 </form>
             </td>
-            <td class="text-center">{{ items.item_total }}</td>
-            <td class="text-center">
-                <a href="{% url 'remove_cart_view' product_slug=items.product.slug %}">
-                <button class="btn-danger">Удалить из корзины</button>
-                </a>
-            </td>
+            <td class="text-left">{{ item.item_total }} руб.</td>
+            <td class="text-left"> руб.</td>
+            <td><a href="{% url 'remove_from_cart' product_slug=item.product.slug %}"><button class="btn-danger">Удалить</button></a></td>
+          </tr>
+        </tr>
     {% endfor %}
+        <tr class="total">
+            <td><strong>Всего к оплатe</strong></td>
+          <td colspan="4"></td>
+          <td class="num"><strong> руб.</strong></td>
+        </tr>
         </tbody>
-    </tr>
 </table>
 {% endblock content %}

@@ -76,7 +76,6 @@ class Product(models.Model):
         return reverse('product_detail', kwargs={'product_slug': self.slug})
 
 
-
 class Info(models.Model):
 
     title = models.CharField(max_length=100)
@@ -105,6 +104,43 @@ class Asker(models.Model):
 
     def get_absolute_url(self):
         return reverse('asker_detail', kwargs={'asker_slug': self.slug})
+
+
+class CartItem(models.Model):
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    qty = models.PositiveIntegerField(default=1)
+    item_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f'Корзина для товара {self.product.title}'
+
+
+class Cart(models.Model):
+
+    items = models.ManyToManyField(CartItem, blank=True)
+    cart_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return str(self.id)
+
+    def add_to_cart_mod(self, product_slug):
+        cart = self
+        product = Product.objects.get(slug=product_slug)
+        new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
+        if new_item not in cart.items.all():
+            cart.items.add(new_item)
+            cart.save()
+
+    def remove_from_cart_mod(self, product_slug):
+        cart = self
+        product = Product.objects.get(slug=product_slug)
+        for cart_item in cart.items.all():
+            if cart_item.product == product:
+                cart.items.remove(cart_item)
+                cart.save()
+
+
 
 
 

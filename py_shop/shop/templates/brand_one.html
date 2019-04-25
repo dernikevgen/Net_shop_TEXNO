@@ -12,7 +12,11 @@
             <a href="{{ product.get_absolute_url }}" class="text-center">{{ product.title }}</a>
         </p>
         <p class="text-center" style="font-size:18px;"> Цена: {{ product.price }}</p>
-        <p class="text-center"><a href="{% url 'CartAdd' product.id %}" method="post"  class="text-center"><button class="btn-danger">Добавить в корзину</button></a></p>
+        <p class="text-center">
+            <a href="{% url 'add_to_cart' product_slug=product.slug %}" method="post" class="text-center">
+                <button class="btn-danger">Добавить в корзину</button>
+            </a>
+        </p>
     </div>
     {% endfor %}
 </div>
