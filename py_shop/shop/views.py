@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse
 from shop.models import ThemeFront, Product, Category, Info, Asker, Brand, Cart, CartItem
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from decimal import Decimal
 
 
 def base_view(request):
@@ -108,7 +109,7 @@ def category_all_view(request):
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    cart = Cart.objects.get()
+    cart = Cart.objects.first()
     context = {
         'infos': infos,
         'askers': askers,
@@ -127,7 +128,7 @@ def brand_view(request):
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    cart = Cart.objects.get()
+    cart = Cart.objects.first()
     context = {
         'categories': categories,
         'infos': infos,
@@ -177,7 +178,7 @@ def repairs_view(request):
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.all()
-    cart = Cart.objects.get()
+    cart = Cart.objects.first()
     context = {
         'categories': categories,
         'infos': infos,
@@ -196,7 +197,7 @@ def asker_view_one(request):
     brands = Brand.objects.all()
     inf_infs = Asker.objects.filter(priority=False)
     askers = Asker.objects.filter(priority=True)
-    cart = Cart.objects.get()
+    cart = Cart.objects.first()
     context = {
         'categories': categories,
         'infos': infos,
@@ -215,7 +216,7 @@ def asker_view_two(request):
     brands = Brand.objects.all()
     inf_infs = Asker.objects.filter(priority=False)
     askers = Asker.objects.filter(priority=True)
-    cart = Cart.objects.get()
+    cart = Cart.objects.first()
     context = {
         'categories': categories,
         'infos': infos,
@@ -234,7 +235,7 @@ def target_view(request):
     brands = Brand.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    cart = Cart.objects.get()
+    cart = Cart.objects.first()
     context = {
         'categories': categories,
         'infos': infos,
@@ -247,6 +248,7 @@ def target_view(request):
 
 
 def cart_base_view(request):
+    '''базовая страница корзины'''
     '''страница корзины'''
     try:
         cart_id = request.session['cart_id']
@@ -274,7 +276,8 @@ def cart_base_view(request):
     return render(request, 'cart.html', context=context)
 
 
-def add_to_cart(request, product_slug):
+def add_to_cart(request):
+    '''добавление товара в корзину'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -285,12 +288,24 @@ def add_to_cart(request, product_slug):
         cart_id = cart.id
         request.session['cart_id'] = cart_id
         cart = Cart.objects.get(id=cart_id)
+    product_slug = request.GET.get('product_slug')
     product = Product.objects.get(slug=product_slug)
     cart.add_to_cart_mod(product.slug)
-    return HttpResponseRedirect(reverse('cart'))
+    value_cart_total = 0.00
+    for item in cart.items.all():
+        value_cart_total += float(item.item_total)
+    cart.cart_total = value_cart_total
+    cart.save()
+    return JsonResponse(
+        {
+            'cart_total': cart.items.count(),
+            'cart_total_final': cart.cart_total,
+        }
+    )
 
 
-def remove_from_cart(request, product_slug):
+def remove_from_cart(request):
+    '''удаление товара из корзины'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -301,9 +316,54 @@ def remove_from_cart(request, product_slug):
         cart_id = cart.id
         request.session['cart_id'] = cart_id
         cart = Cart.objects.get(id=cart_id)
+    product_slug = request.GET.get('product_slug')
     product = Product.objects.get(slug=product_slug)
     cart.remove_from_cart_mod(product.slug)
-    return HttpResponseRedirect(reverse('cart'))
+    value_cart_total = 0.00
+    for item in cart.items.all():
+        value_cart_total += float(item.item_total)
+    cart.cart_total = value_cart_total
+    cart.save()
+    return JsonResponse(
+        {
+            'cart_total': cart.items.count(),
+            'cart_total_final': cart.cart_total,
+        }
+    )
+
+
+def count_item_qty(request):
+    '''подсчёт суммы от кол-ва товаров и итоговой суммы корзины'''
+    try:
+        cart_id = request.session['cart_id']
+        cart = Cart.objects.get(id=cart_id)
+        request.session['total'] = cart.items.count()
+    except:
+        cart = Cart()
+        cart.save()
+        cart_id = cart.id
+        request.session['cart_id'] = cart_id
+        cart = Cart.objects.get(id=cart_id)
+    qty = request.GET.get('qty')
+    item_id = request.GET.get('item_id')
+    cart_item = CartItem.objects.get(id=int(item_id))
+    cart_item.qty = int(qty)
+    cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
+    cart_item.save()
+    value_cart_total = 0.00
+    for item in cart.items.all():
+        value_cart_total += float(item.item_total)
+    cart.cart_total = value_cart_total
+    cart.save()
+    return JsonResponse(
+        {
+            'cart_total': cart.items.count(),
+            'item_total': cart_item.item_total,
+            'cart_total_final': cart.cart_total,
+        }
+    )
+
+
 
 
 

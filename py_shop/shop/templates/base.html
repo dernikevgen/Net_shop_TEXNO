@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,9 +12,8 @@
     <title>T E X N O</title>
     <link rel='stylesheet' type="text/css" href="/static/css/bootstrap.css">
     <link rel='stylesheet' href="/static/css/shop-homepage.css">
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -103,7 +103,7 @@
                     {% if not request.user.is_authenticated %}
                         <li><a href="#"><font  color="white">Войти</font></a> </li>
                     {% else %}
-                        <li><a href="{% url 'cart' %}">Корзина<span class="badge">{{ cart.items.count }}</span></a> </li>
+                        <li><a href="{% url 'cart' %}">Корзина<span class="badge" id="cart_count">{{ cart.items.count }}</span></a> </li>
                     {% endif %}
                 </ul>
             </div>
@@ -111,6 +111,7 @@
     </nav>
     <div class="container">
         {% block content %}
+        <script src="{% static 'js/jquery.min.js' %}"></script>
         <div class="row">
             <div class="col-md-3">
                 <p class="lead">T E X N O</p>
@@ -159,10 +160,10 @@
                 </div>
                 <br>
                 <div class="row">
-                    <p class="lead text-center">Лидеры продаж</p>
+                    <p class="lead text-center"><big>Лидеры продаж</big></p>
                     <hr>
                     {% for product in products %}
-                    <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="col-sm-4 col-lg-4 col-md-4" >
                         <div class="thumbnail">
                             <img src="{{ product.image.url }}" alt="" style='width:auto; height:250px;'>
                             <div class="caption">
@@ -172,14 +173,22 @@
                                         <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
                                     </strong>
                                 </h5>
-                                <p>{{ product.description}}</p>
+                                <style type="text/css">
+                                     p.clip {
+                                     white-space: nowrap;
+                                     overflow: hidden;
+                                     padding: 10px;
+                                     text-overflow: ellipsis;
+                                     }
+                                 </style>
+                                <p class="clip">{{ product.description}}</p>
                             </div>
-                                    <p class="text-center">
-                                        <a href="{% url 'add_to_cart' product_slug=product.slug %}" method="post"   class="text-center" >
-                                            <button class="btn-danger">Добавить в корзину</button>
-                                        </a>
-                                    </p>
-                                <hr>
+                            <p class="text-center">
+                                    <a href="#" class='add_to_cart' data-slug='{{ product.slug }}'  class="text-center" >
+                                        <button class="btn-danger">Добавить в корзину</button>
+                                    </a>
+                                </p>
+
                             <div class="ratings">
                                 <p class="pull-right">15 reviews</p>
                                 <p>
@@ -192,6 +201,25 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                    $(document).ready(function(){
+                        $('.add_to_cart').on('click', function(e){
+                            e.preventDefault()
+                            product_slug = $(this).attr('data-slug')
+                            data = {
+                                product_slug : product_slug
+                            }
+                            $.ajax({
+                                type: "GET",
+                                url:"{% url 'add_to_cart' %}",
+                                data: data,
+                                success: function(data){
+                                $("#cart_count").html(data.cart_total)
+                                }
+                            })
+                        })
+                     })
+                    </script>
                     {% endfor %}
                     <div class="col-lg-12">
                         <hr>
@@ -218,9 +246,8 @@
                 </div>
             </div>
         </footer>
-    </div>
-    <script src="/static/js/bootstrap.js"></script>
-    <script src="static/js/jquery.js"></script>
+    </div >
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{%  static 'js/bootstrap.js' %}"></script>
 </body>
-
 </html>

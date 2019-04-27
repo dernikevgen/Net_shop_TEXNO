@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<script src="static/js/jquery.js"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
 <div class="row">
     {% for category in categories %}
     <div class="col-sm-4 col-lg-4 col-md-4">

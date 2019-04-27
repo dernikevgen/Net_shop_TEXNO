@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
-<script src="static/js/jquery.js"></script>
 {% block content %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
 <div class="col-sm-12">
     <h2>{{ brand.name }} </h2>
     <hr>
@@ -13,11 +13,30 @@
         </p>
         <p class="text-center" style="font-size:18px;"> Цена: {{ product.price }}</p>
         <p class="text-center">
-            <a href="{% url 'add_to_cart' product_slug=product.slug %}" method="post" class="text-center">
+            <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center">
                 <button class="btn-danger">Добавить в корзину</button>
             </a>
         </p>
     </div>
+    <script>
+    $(document).ready(function(){
+        $('.add_to_cart').on('click', function(e){
+            e.preventDefault()
+            product_slug = $(this).attr('data-slug')
+            data = {
+                product_slug : product_slug
+            }
+            $.ajax({
+                type: "GET",
+                url:"{% url 'add_to_cart' %}",
+                data: data,
+                success: function(data){
+                    $("#cart_count").html(data.cart_total)
+                }
+            })
+        })
+    })
+    </script>
     {% endfor %}
 </div>
 {% endblock content %}
