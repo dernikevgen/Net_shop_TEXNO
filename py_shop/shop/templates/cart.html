@@ -2,8 +2,15 @@
 {% load static %}
 {% block content %}
 <script src="{% static 'js/jquery.min.js' %}"></script>
-<h1 class="text-center">Корзина</h1>
-<table class="table" style= "font-size:17px">
+{% if cart.items.count > 0 %}
+<style type="text/css">
+    table {
+      border: none;
+    }
+</style>
+<div class="my-cart">
+    <h1 class="text-center">Корзина</h1>
+<table class="table" style="font-size:17px" border="2px" bgcolor="#89EC6A" align="center">
     <thead>
     <tr>
         <th>Изображение</th>
@@ -38,13 +45,24 @@
                 </td>
            </tr>
         {% endfor %}
-        <tr class="total">
-            <td class='text-center'><strong><h3>Всего к оплатe:</h3></strong></td>
+        <tr class="total" style="font-size:20px">
+            <td class='text-center'><h3>Всего к оплатe:</h3></td>
             <td colspan="4"></td>
-            <td class="num" id="cart-total-price"><h3>{{ cart.cart_total }} руб.</h3></td>
+            <td class="num" id="cart-total-price">{{ cart.cart_total }} руб.</td>
         </tr>
         </tbody>
 </table>
+    <br>
+    <a href="{% url 'checkout' %}" class="pull-right" style="font-size:17px">
+        <button class="btn btn-success">Оформить заказ</button>
+    </a>
+</div>
+    <h1 class="cart-empty"></h1>
+    <h3 class="cart-empty-t"></h3>
+{% else %}
+    <h1 class="text-center">Ваша корзина пуста</h1>
+    <h3 class='text-right'>Всего к оплатe: 0 руб.</h3>
+{% endif %}
 <script>
     $(document).ready(function(){
         $('.remove_from_cart').on('click', function(e){
@@ -61,6 +79,12 @@
                 success: function(data){
                     $("#cart_count").html(data.cart_total)
                     $(".cart-item-"+item_product_id).css('display', 'none')
+                    $("#cart-total-price").html(parseFloat(data.cart_total_final).toFixed(2) + 'руб.')
+                    if (parseInt(data.cart_total) == 0){
+                        $('.my-cart').css('display', 'none')
+                        $('.cart-empty').html('<h1 class="text-center">Ваша корзина пуста</h1>')
+                        $('.cart-empty-t').html('<h3 class="text-right">Всего к оплатe: 0 руб.</h3>')
+                    }
                 }
             })
         })
@@ -79,7 +103,7 @@
                 data: data,
                 success: function(data){
                     $("#cart-item-total-" + item_id).html(parseFloat(data.item_total).toFixed(2) + 'руб.')
-                    $("#cart-total-price").html('<h3>' + parseFloat(data.cart_total_final).toFixed(2) + 'руб.</h3>')
+                    $("#cart-total-price").html(parseFloat(data.cart_total_final).toFixed(2) + 'руб.')
                 }
             })
         })

@@ -3,9 +3,9 @@
 {% block content %}
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <div class="col-sm-12">
-    <h2>{{ brand.name }} </h2>
-    <hr>
     {% for product in product_of_brand %}
+    <h1 class="text-center">{{ product.brand.name }}</h1>
+    <hr>
     <div class="col-sm-4">
         <img src="{{ product.image.url }}" style="width:auto; height:350px;">
         <p class=" lead text-center">
@@ -13,9 +13,15 @@
         </p>
         <p class="text-center" style="font-size:18px;"> Цена: {{ product.price }}</p>
         <p class="text-center">
+            {% if not request.user.is_authenticated %}
+            <p class="text-center" style="font-size:18px">Чтобы добавить товар, нужно
+                <a target="_blank" href="#">зайти</a>
+            </p>
+            {% else %}
             <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center">
-                <button class="btn-danger">Добавить в корзину</button>
+                <button class="btn-success">Добавить в корзину</button>
             </a>
+            {% endif %}
         </p>
     </div>
     <script>

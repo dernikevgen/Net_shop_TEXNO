@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+{% if cart.cart_total  == 0 %}
+<h1 class="text-center">Ваш заказ ещё не собран</h1>
+{% else %}
+<h1 class="text-center">Ваш заказ</h1>
+{% endif %}
+<table class="table" style="font-size:17px" border="2px" bgcolor="#89EC6A" align="center" >
+    <thead>
+    <tr>
+        <th>Изображение</th>
+        <th>Товар</th>
+        <th>Колл-во</th>
+        <th>Итоговая цена</th>
+    </tr>
+    </thead>
+        <tbody>
+        {% for item in cart.items.all %}
+           <tr>
+                <td class="text-center">
+                    <img src="{{ item.product.image.url }}" alt="" style='padding-left:auto; height:30%;'/>
+                </td>
+                <td class="text-left">
+                    <a  href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a>
+                </td>
+                <td class="text-center">{{ item.qty }}</td>
+                <td class='text-center'>{{ item.item_total }} руб.</td>
+           </tr>
+        {% endfor %}
+        <tr class="total" style="font-size:20px">
+            <td class='text-center'><h3>Всего к оплатe:</h3></td>
+            <td colspan="2"></td>
+            <td class="num">{{ cart.cart_total }} руб.</td>
+        </tr>
+        </tbody>
+</table>
+
+<br>
+{% if cart.cart_total  == 0 %}
+<a href="{% url 'base' %}" class="pull-left" style="font-size:20px">
+    <button class="btn-danger">На главную</button>
+</a>
+{% else %}
+<a href="{% url 'order' %}" class="pull-right" style="font-size:20px">
+    <button class="btn-success">Подтвердить</button>
+</a>
+<a href="{% url 'cart' %}" class="pull-left" style="font-size:20px">
+    <button class="btn-danger">Вернуться</button>
+</a>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<br>
+<style type="text/css">
+    table {
+      border: none;
+    }
+</style>
+<form action='{% url "thank_you" %}' method="POST">
+    {% csrf_token %}
+    <div class="col-sm-4">
+        {{ form.name|as_crispy_field }}
+        {{ form.sail|as_crispy_field }}
+    </div>
+    <div class="col-sm-4">
+        {{ form.last_name|as_crispy_field }}
+        {{ form.buying_type|as_crispy_field }}
+    </div>
+    <div class="col-sm-4">
+        {{ form.phone|as_crispy_field }}
+        {{ form.address_false|as_crispy_field }}
+        {{ form.address_true|as_crispy_field }}
+    </div>
+    <div class="col-sm-4">
+        {{ form.date_delivery_true|as_crispy_field }}
+        {{ form.date_delivery_false|as_crispy_field }}
+        {{ form.day_half|as_crispy_field }}
+    </div>
+    <div class="col-sm-8">
+        {{ form.comments|as_crispy_field }}
+        <a href="#" class="pull-right" style="font-size:20px">
+            <button class="btn-success">Готово</button>
+        </a>
+    </div>
+</form>
+<script>
+    $(document).ready(function(){
+        $('#div_id_address_false').css('display', 'none')
+        $('#div_id_date_delivery_false').css('display', 'none')
+        $('#id_buying_type').on('click', function(){
+            buying_type = $(this).val()
+            if (buying_type == 'delivery'){
+                $('#div_id_address_true').css('display', 'block')
+                $('#div_id_date_delivery_true').css('display', 'block')
+                $('#div_id_address_false').css('display', 'none')
+                $('#div_id_date_delivery_false').css('display', 'none')
+                $('#div_id_day_half').css('display', 'block')
+            }else{
+                $('#div_id_address_false').css('display', 'block')
+                $('#div_id_date_delivery_false').css('display', 'block')
+                $('#div_id_address_true').css('display', 'none')
+                $('#div_id_date_delivery_true').css('display', 'none')
+                $('#div_id_day_half').css('display', 'none')
+            }
+        })
+    })
+</script>
+{% endblock content %}

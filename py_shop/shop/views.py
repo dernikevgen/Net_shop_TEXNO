@@ -1,19 +1,19 @@
 from django.shortcuts import render
+from shop.models import ThemeFront, Product, Category, Info, Asker, Brand, Cart, CartItem, Order
+from django.http import JsonResponse, HttpResponseRedirect
+from shop.form import OrderForm
 from django.urls import reverse
-from shop.models import ThemeFront, Product, Category, Info, Asker, Brand, Cart, CartItem
-from django.http import HttpResponseRedirect, JsonResponse
-from decimal import Decimal
 
 
 def base_view(request):
     '''базовая страница'''
     categories = Category.objects.all()
-    products = Product.objects.all()
+    products = Product.objects.filter(priority=True)
     images = ThemeFront.objects.all()
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -40,12 +40,12 @@ def base_view(request):
 def product_view(request, product_slug):
     '''страница товара'''
     product = Product.objects.get(slug=product_slug)
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     products = Product.objects.all()
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -74,11 +74,12 @@ def category_view(request, category_slug):
     category = Category.objects.get(slug=category_slug)
     product_of_category = Product.objects.filter(category=category)
     products = Product.objects.all()
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
+    categories_all = Category.objects.all()
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -95,6 +96,7 @@ def category_view(request, category_slug):
         'askers': askers,
         'brands': brands,
         'inf_infs': inf_infs,
+        'categories_all': categories_all,
         'categories': categories,
         'products': products,
         'cart': cart,
@@ -108,7 +110,7 @@ def category_all_view(request):
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     cart = Cart.objects.first()
     context = {
         'infos': infos,
@@ -123,11 +125,12 @@ def category_all_view(request):
 
 def brand_view(request):
     '''страница товаров определённого бренда'''
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    brands_all = Brand.objects.all()
     cart = Cart.objects.first()
     context = {
         'categories': categories,
@@ -135,6 +138,7 @@ def brand_view(request):
         'askers': askers,
         'brands': brands,
         'inf_infs': inf_infs,
+        'brands_all': brands_all,
         'cart': cart,
     }
     return render(request, 'brands.html', context=context)
@@ -144,11 +148,12 @@ def brand_one_view(request, brand_slug):
     '''страница всех брендов'''
     brand = Brand.objects.get(slug=brand_slug)
     product_of_brand = Product.objects.filter(brand=brand)
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    brands_all = Brand.objects.all()
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -166,6 +171,7 @@ def brand_one_view(request, brand_slug):
         'askers': askers,
         'brands': brands,
         'inf_infs': inf_infs,
+        'brands_all': brands_all,
         'cart': cart,
     }
     return render(request, 'brand_one.html', context=context)
@@ -173,11 +179,11 @@ def brand_one_view(request, brand_slug):
 
 def repairs_view(request):
     '''информация(сервис)'''
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     cart = Cart.objects.first()
     context = {
         'categories': categories,
@@ -192,9 +198,9 @@ def repairs_view(request):
 
 def asker_view_one(request):
     '''информация (вопросы(1))'''
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     askers = Asker.objects.filter(priority=True)
     cart = Cart.objects.first()
@@ -211,9 +217,9 @@ def asker_view_one(request):
 
 def asker_view_two(request):
     '''информация (вопросы(2))'''
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     askers = Asker.objects.filter(priority=True)
     cart = Cart.objects.first()
@@ -230,9 +236,9 @@ def asker_view_two(request):
 
 def target_view(request):
     '''информация (о портале)'''
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     cart = Cart.objects.first()
@@ -245,6 +251,27 @@ def target_view(request):
         'cart': cart,
     }
     return render(request, 'target.html', context=context)
+
+
+def history_orders_view(request):
+    '''История заказов'''
+    categories = Category.objects.filter(priority=True)
+    infos = Info.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
+    askers = Asker.objects.filter(priority=True)
+    cart = Cart.objects.first()
+    order = Order.objects.all()
+    context = {
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+        'cart': cart,
+        'order': order,
+    }
+    return render(request, 'history_orders.html', context=context)
 
 
 def cart_base_view(request):
@@ -260,9 +287,9 @@ def cart_base_view(request):
         cart_id = cart.id
         request.session['cart_id'] = cart_id
         cart = Cart.objects.get(id=cart_id)
-    categories = Category.objects.all()
+    categories = Category.objects.filter(priority=True)
     infos = Info.objects.all()
-    brands = Brand.objects.all()
+    brands = Brand.objects.filter(priority=True)
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     context = {
@@ -347,14 +374,7 @@ def count_item_qty(request):
     qty = request.GET.get('qty')
     item_id = request.GET.get('item_id')
     cart_item = CartItem.objects.get(id=int(item_id))
-    cart_item.qty = int(qty)
-    cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
-    cart_item.save()
-    value_cart_total = 0.00
-    for item in cart.items.all():
-        value_cart_total += float(item.item_total)
-    cart.cart_total = value_cart_total
-    cart.save()
+    cart.count_qty(qty, item_id)
     return JsonResponse(
         {
             'cart_total': cart.items.count(),
@@ -364,14 +384,114 @@ def count_item_qty(request):
     )
 
 
+def checkout_view(request):
+    '''Страница предварительного заказа'''
+    try:
+        cart_id = request.session['cart_id']
+        cart = Cart.objects.get(id=cart_id)
+        request.session['total'] = cart.items.count()
+    except:
+        cart = Cart()
+        cart.save()
+        cart_id = cart.id
+        request.session['cart_id'] = cart_id
+        cart = Cart.objects.get(id=cart_id)
+    categories = Category.objects.filter(priority=True)
+    infos = Info.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
+    context = {
+        'cart': cart,
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+    }
+    return render(request, 'checkout.html', context=context)
 
 
+def order_create_view(request):
+    '''оформления заказа'''
+    try:
+        cart_id = request.session['cart_id']
+        cart = Cart.objects.get(id=cart_id)
+        request.session['total'] = cart.items.count()
+    except:
+        cart = Cart()
+        cart.save()
+        cart_id = cart.id
+        request.session['cart_id'] = cart_id
+        cart = Cart.objects.get(id=cart_id)
+    form = OrderForm(request.POST or None)
+    categories = Category.objects.filter(priority=True)
+    infos = Info.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
+    context = {
+        'form': form,
+        'cart': cart,
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+    }
+    return render(request, 'order.html', context=context)
 
 
-
-
-
-
+def make_order_view(request):
+    '''cтраница заказа'''
+    try:
+        cart_id = request.session['cart_id']
+        cart = Cart.objects.get(id=cart_id)
+        request.session['total'] = cart.items.count()
+    except:
+        cart = Cart()
+        cart.save()
+        cart_id = cart.id
+        request.session['cart_id'] = cart_id
+        cart = Cart.objects.get(id=cart_id)
+    form = OrderForm(request.POST or None)
+    images = ThemeFront.objects.all()
+    categories = Category.objects.filter(priority=True)
+    infos = Info.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
+    context = {
+        'cart': cart,
+        'images': images,
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+    }
+    if form.is_valid():
+        name = form.cleaned_data['name']
+        last_name = form.cleaned_data['last_name']
+        phone = form.cleaned_data['phone']
+        buying_type = form.cleaned_data['buying_type']
+        address_true = form.cleaned_data['address_true']
+        comments = form.cleaned_data['comments']
+        new_order = Order()
+        new_order.user = request.user
+        new_order.save()
+        new_order.first_name = name
+        new_order.last_name = last_name
+        new_order.phone = phone
+        new_order.address = address_true
+        new_order.buying_type = buying_type
+        new_order.comments = comments
+        new_order.total = cart.cart_total
+        new_order.save()
+        del request.session['cart_id']
+        del request.session['total']
+        return HttpResponseRedirect(reverse('thank_you'))
+    return render(request, 'thank_you.html', context=context)
 
 
 

@@ -2,6 +2,7 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.urls import reverse
 from decimal import Decimal
+from django.conf import settings
 
 
 def image_folder(instance, filename):
@@ -140,12 +141,40 @@ class Cart(models.Model):
                 cart.items.remove(cart_item)
                 cart.save()
 
+    def count_qty(self, qty, item_id):
+        cart = self
+        cart_item = CartItem.objects.get(id=int(item_id))
+        cart_item.qty = int(qty)
+        cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
+        cart_item.save()
+        value_cart_total = 0.00
+        for item in cart.items.all():
+            value_cart_total += float(item.item_total)
+        cart.cart_total = value_cart_total
+        cart.save()
 
 
+ORDER_STATUS_CHOICES = (
+    ("Принят в обработку", "Принят в обработку"),
+    ("Выполняется", "Выполняется"),
+    ("Оплачен", "Оплачен"),
+)
 
 
+class Order(models.Model):
 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Cart)
+    total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+    first_name = models.CharField(max_length=120)
+    last_name = models.CharField(max_length=120)
+    phone = models.CharField(max_length=13)
+    address = models.CharField(max_length=120)
+    buying_type = models.CharField(max_length=40, choices=(("Самовывоз", "Самовывоз"),
+                                                           ("Доставка", "Доставка")), default="Доставка")
+    date = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField(blank=True)
+    status = models.CharField(max_length=120, choices=ORDER_STATUS_CHOICES, default="Принят в обработку")
 
-
-
-
+    def __str__(self):
+        return f"Заказ под номером {str(self.id)}"
