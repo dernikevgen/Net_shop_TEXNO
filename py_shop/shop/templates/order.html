@@ -21,12 +21,10 @@
     </div>
     <div class="col-sm-4">
         {{ form.phone|as_crispy_field }}
-        {{ form.address_false|as_crispy_field }}
         {{ form.address_true|as_crispy_field }}
     </div>
     <div class="col-sm-4">
         {{ form.date_delivery_true|as_crispy_field }}
-        {{ form.date_delivery_false|as_crispy_field }}
         {{ form.day_half|as_crispy_field }}
     </div>
     <div class="col-sm-8">
@@ -45,12 +43,8 @@
             if (buying_type == 'delivery'){
                 $('#div_id_address_true').css('display', 'block')
                 $('#div_id_date_delivery_true').css('display', 'block')
-                $('#div_id_address_false').css('display', 'none')
-                $('#div_id_date_delivery_false').css('display', 'none')
                 $('#div_id_day_half').css('display', 'block')
             }else{
-                $('#div_id_address_false').css('display', 'block')
-                $('#div_id_date_delivery_false').css('display', 'block')
                 $('#div_id_address_true').css('display', 'none')
                 $('#div_id_date_delivery_true').css('display', 'none')
                 $('#div_id_day_half').css('display', 'none')

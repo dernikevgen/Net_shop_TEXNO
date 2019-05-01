@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<h3 class="text-center">Регистрация нового пользователя</h3>
+<div class="col-sm-8 col-sm-offset-2">
+<form action='' method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="col-sm-4 col-sm-offset-8">
+        <input type="submit" class="btn btn-success btn-block" value="Зарегистрировать">
+    </div>
+</form>
+</div>
+
+{% endblock content %}

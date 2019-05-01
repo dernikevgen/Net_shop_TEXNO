@@ -33,7 +33,7 @@ class BrandAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
 
-    list_display = ['id', 'total', 'date', 'status']
+    list_display = ['id', 'first_name', 'total', 'date', 'buying_type', 'status']
 
     class Meta:
 

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+{% if request.user.is_authenticated %}
+<style type="text/css">
+    table {
+      border: none;
+    }
+</style>
+<table class="table" style="font-size:17px" border="2px" bgcolor="#89EC6A" align="center" >
+    <thead>
+
+    <tr style="background: lightblue">
+        <th>Номер заказа</th>
+        <th>Имя заказчика</th>
+        <th>Сумма заказа</th>
+        <th>Способ получения</th>
+        <th>Статус</th>
+        <th>Дата оформления заказа</th>
+    </tr>
+    </thead>
+        <tbody>
+            {% for orders in order %}
+           <tr>
+                <td class="text-center">{{ orders.id }}</td>
+                <td class="text-center">{{ orders.first_name }}</td>
+                <td class="text-center">{{ orders.total }} </td>
+                <td class="text-center">{{ orders.buying_type }} </td>
+                <td class="text-center">{{ orders.status }}</td>
+                <td class="text-center">{{ orders.date }}</td>
+           </tr>
+            {% endfor %}
+        </tbody>
+</table>
+{% else %}
+<div class="cil-sm-4">
+    <p class="text-center" style="font-size:25px">Чтобы смотреть свою историю заказов, нужно
+        <a target="_blank" href="{% url 'registration' %}">войти</a>
+    </p>
+</div>
+{% endif %}
+{% endblock content %}

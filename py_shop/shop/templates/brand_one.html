@@ -15,7 +15,7 @@
         <p class="text-center">
             {% if not request.user.is_authenticated %}
             <p class="text-center" style="font-size:18px">Чтобы добавить товар, нужно
-                <a target="_blank" href="#">зайти</a>
+                <a target="_blank" href="{% url 'registration' %}">войти</a>
             </p>
             {% else %}
             <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center">

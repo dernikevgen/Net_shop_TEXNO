@@ -11,10 +11,16 @@
     <p class="text-center" >{{ product.description }}</p>
     <p class="text-center" >В наличии на складе: {{ product.stock }}</p>
     <hr>
-    <p class="pull-right">
-        <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center" >
+    <p class="text-center">
+        {% if not request.user.is_authenticated %}
+        <p class="text-center" style="font-size:18px">Чтобы добавить товар, нужно
+            <a target="_blank" href="{% url 'registration' %}">войти</a>
+        </p>
+        {% else %}
+        <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center">
             <button class="btn-success">Добавить в корзину</button>
         </a>
+        {% endif %}
     </p>
 </div>
 <script>

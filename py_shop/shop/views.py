@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from shop.models import ThemeFront, Product, Category, Info, Asker, Brand, Cart, CartItem, Order
 from django.http import JsonResponse, HttpResponseRedirect
-from shop.form import OrderForm
+from shop.form import OrderForm, RegistrationForm, LoginForm
 from django.urls import reverse
+from django.contrib.auth import login, authenticate
 
 
 def base_view(request):
@@ -476,13 +477,18 @@ def make_order_view(request):
         phone = form.cleaned_data['phone']
         buying_type = form.cleaned_data['buying_type']
         address_true = form.cleaned_data['address_true']
+        sail = form.cleaned_data['sail']
+        day_half = form.cleaned_data['day_half']
         comments = form.cleaned_data['comments']
         new_order = Order()
         new_order.user = request.user
         new_order.save()
+        new_order.items.add(cart)
         new_order.first_name = name
         new_order.last_name = last_name
         new_order.phone = phone
+        new_order.sail = sail
+        new_order.day_half = day_half
         new_order.address = address_true
         new_order.buying_type = buying_type
         new_order.comments = comments
@@ -492,6 +498,68 @@ def make_order_view(request):
         del request.session['total']
         return HttpResponseRedirect(reverse('thank_you'))
     return render(request, 'thank_you.html', context=context)
+
+
+def registration_view(request):
+    '''страница регестрации и входа'''
+    categories = Category.objects.filter(priority=True)
+    infos = Info.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
+    form = RegistrationForm(request.POST or None)
+    if form.is_valid():
+        new_user = form.save(commit=False)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        email = form.cleaned_data['email']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        new_user.username = username
+        new_user.set_password(password)
+        new_user.email = email
+        new_user.first_name = first_name
+        new_user.last_name = last_name
+        new_user.save()
+        login_user = authenticate(username=username, password=password)
+        if login_user:
+            login(request, login_user)
+            return HttpResponseRedirect(reverse('base'))
+    context = {
+        'form': form,
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+    }
+    return render(request, 'registration.html', context=context)
+
+
+def login_view(request):
+    '''Страница входа'''
+    categories = Category.objects.filter(priority=True)
+    infos = Info.objects.all()
+    brands = Brand.objects.filter(priority=True)
+    askers = Asker.objects.filter(priority=True)
+    inf_infs = Asker.objects.filter(priority=False)
+    form = LoginForm(request.POST or None)
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        login_user = authenticate(username=username, password=password)
+        if login_user:
+            login(request, login_user)
+            return HttpResponseRedirect(reverse('base'))
+    context = {
+        'form': form,
+        'categories': categories,
+        'infos': infos,
+        'brands': brands,
+        'inf_infs': inf_infs,
+        'askers': askers,
+    }
+    return render(request, 'login.html', context=context)
 
 
 

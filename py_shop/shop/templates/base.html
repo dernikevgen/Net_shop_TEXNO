@@ -113,17 +113,17 @@
                             {% endif %}
                         </ul>
                     </li>
-                    <a class="navbar-brand" href="http://127.0.0.1:8000/admin">Админка</a>
                 </ul>
                 <ul class="lead nav navbar-nav navbar-right">
                     {% if not request.user.is_authenticated %}
-                        <li><a href="#">Войти</a></li>
+                        <li><a href="{% url 'login' %}" style="font-size:18px">Войти</a></li>
+                        <li><a href="{% url 'registration' %}" style="font-size:18px">Регистрация</a></li>
                     {% else %}
                         <li>
                             <a href="{% url 'cart' %}">Корзина<span class="badge" id="cart_count">{{ cart.items.count }}</span>
                             </a>
                         </li>
-                        <li><a href="{% url 'logout' %}">Выйти</a></li>
+                        <li><a href="{% url 'logout' %}" style="font-size:18px">Выйти</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -248,7 +248,7 @@
                             <p class="text-center">
                             {% if not request.user.is_authenticated %}
                                 <p class="text-center" style="font-size:15px">Чтобы добавить товар, нужно
-                                    <a target="_blank" href="#">зайти</a>
+                                    <a target="_blank" href="{% url 'registration' %}">войти</a>
                                 </p>
                             {% else %}
                                 <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center">
