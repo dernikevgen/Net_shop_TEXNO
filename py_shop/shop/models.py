@@ -175,6 +175,7 @@ class Order(models.Model):
     sail = models.CharField(max_length=40, choices=(("Наличными", "Наличными"),
                                                     ("Картой", "Картой")), default="Наличными")
     date = models.DateTimeField(auto_now_add=True)
+    date_delivery = models.CharField(max_length=40)
     comment = models.TextField(blank=True)
     status = models.CharField(max_length=120, choices=ORDER_STATUS_CHOICES, default="Принят в обработку")
 

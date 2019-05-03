@@ -71,10 +71,10 @@ class OrderForm(forms.Form):
     last_name = forms.CharField()
     phone = forms.CharField(max_length=13, required=True)
     buying_type = forms.ChoiceField(widget=forms.Select(), choices=([("Доставка", "Доставка"), ("Самовывоз", "Самовывоз")]))
-    sail = forms.ChoiceField(widget=forms.Select(), choices=([("cash", "Наличными"), ("cart", "Карточкой")]))
+    sail = forms.ChoiceField(widget=forms.Select(), choices=([("Наличными", "Наличными"), ("Картой", "Карточкой")]))
     date_delivery = forms.DateField(widget=forms.SelectDateWidget(), initial=timezone.now())
     address_true = forms.CharField(required=False)
-    comments = forms.CharField(widget=forms.Textarea, required=False)
+    comment = forms.CharField(widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kwargs):
 
@@ -86,8 +86,8 @@ class OrderForm(forms.Form):
         self.fields['buying_type'].label = "Способ получения"
         self.fields['address_true'].label = 'Адрес доставки'
         self.fields['address_true'].help_text = 'Обязательно укажите город'
-        self.fields['comments'].label = 'Комментарии к заказу'
-        self.fields['comments'].help_text = 'Оставьте свои комментарии к заказу'
+        self.fields['comment'].label = 'Комментарии к заказу'
+        self.fields['comment'].help_text = 'Оставьте свои комментарии к заказу'
         self.fields['date_delivery'].label = 'Желаемая дата доставки'
         self.fields['date_delivery'].help_text = 'Условия и сроки доставки смотрите в разделе "Сервис -> Доставка"'
 

@@ -481,7 +481,7 @@ def make_order_view(request):
         sail = form.cleaned_data['sail']
         date_delivery = form.cleaned_data['date_delivery']
         address_true = form.cleaned_data['address_true']
-        comments = form.cleaned_data['comments']
+        comment = form.cleaned_data['comment']
 
         new_order = Order()
         new_order.user = request.user
@@ -494,7 +494,7 @@ def make_order_view(request):
         new_order.sail = sail
         new_order.date_delivery = date_delivery
         new_order.address = address_true
-        new_order.comments = comments
+        new_order.comment = comment
         new_order.total = cart.cart_total
         new_order.save()
         del request.session['cart_id']
