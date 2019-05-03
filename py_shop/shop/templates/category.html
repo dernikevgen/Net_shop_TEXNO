@@ -3,9 +3,9 @@
 {% block content %}
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <div class="col-sm-12">
-    {% for product in product_of_category %}
-    <h1 class="text-center">{{ product.category.name }}</h1>
+    <h1 class="text-center">{{ category_title.name }}</h1>
     <hr>
+    {% for product in product_of_category %}
     <div class="col-sm-4">
         <img src="{{ product.image.url }}" style="width:auto; height:350px;">
         <p class=" lead text-center">

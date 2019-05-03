@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 
@@ -67,15 +68,12 @@ class RegistrationForm(forms.ModelForm):
 class OrderForm(forms.Form):
 
     name = forms.CharField(required=True)
-    last_name = forms.CharField(required=False)
+    last_name = forms.CharField()
     phone = forms.CharField(max_length=13, required=True)
-    buying_type = forms.ChoiceField(widget=forms.Select(), choices=([("delivery", "Доставка"), ("self", "Самовывоз")]))
+    buying_type = forms.ChoiceField(widget=forms.Select(), choices=([("Доставка", "Доставка"), ("Самовывоз", "Самовывоз")]))
     sail = forms.ChoiceField(widget=forms.Select(), choices=([("cash", "Наличными"), ("cart", "Карточкой")]))
-    date_delivery_true = forms.CharField(max_length=10, required=False)
-    day_half = forms.ChoiceField(widget=forms.Select(),
-                                 choices=([("morning", "Первая"), ("evening", "Вторая")]),
-                                 required=False)
-    address_true = forms.CharField(required=True)
+    date_delivery = forms.DateField(widget=forms.SelectDateWidget(), initial=timezone.now())
+    address_true = forms.CharField(required=False)
     comments = forms.CharField(widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -90,8 +88,6 @@ class OrderForm(forms.Form):
         self.fields['address_true'].help_text = 'Обязательно укажите город'
         self.fields['comments'].label = 'Комментарии к заказу'
         self.fields['comments'].help_text = 'Оставьте свои комментарии к заказу'
-        self.fields['date_delivery_true'].label = 'Желаемая дата доставки'
-        self.fields['date_delivery_true'].help_text = 'В формате: "day.month.age."'
-        self.fields['day_half'].label = 'Укажите в какой половине дня будет доставка'
-        self.fields['day_half'].help_text = 'Условия и сроки доставки смотрите в разделе "Сервис -> Доставка"'
+        self.fields['date_delivery'].label = 'Желаемая дата доставки'
+        self.fields['date_delivery'].help_text = 'Условия и сроки доставки смотрите в разделе "Сервис -> Доставка"'
 

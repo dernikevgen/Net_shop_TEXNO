@@ -24,8 +24,7 @@
         {{ form.address_true|as_crispy_field }}
     </div>
     <div class="col-sm-4">
-        {{ form.date_delivery_true|as_crispy_field }}
-        {{ form.day_half|as_crispy_field }}
+        {{ form.date_delivery|as_crispy_field }}
     </div>
     <div class="col-sm-8">
         {{ form.comments|as_crispy_field }}
@@ -36,18 +35,14 @@
 </form>
 <script>
     $(document).ready(function(){
-        $('#div_id_address_false').css('display', 'none')
-        $('#div_id_date_delivery_false').css('display', 'none')
         $('#id_buying_type').on('click', function(){
             buying_type = $(this).val()
-            if (buying_type == 'delivery'){
+            if (buying_type == 'Доставка'){
                 $('#div_id_address_true').css('display', 'block')
-                $('#div_id_date_delivery_true').css('display', 'block')
-                $('#div_id_day_half').css('display', 'block')
+                $('#div_id_date_delivery').css('display', 'block')
             }else{
                 $('#div_id_address_true').css('display', 'none')
-                $('#div_id_date_delivery_true').css('display', 'none')
-                $('#div_id_day_half').css('display', 'none')
+                $('#div_id_date_delivery').css('display', 'none')
             }
         })
     })

@@ -81,6 +81,7 @@ def category_view(request, category_slug):
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.filter(priority=True)
+    category_title = Category.objects.get(slug=category_slug)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -101,6 +102,7 @@ def category_view(request, category_slug):
         'categories': categories,
         'products': products,
         'cart': cart,
+        'category_title': category_title,
     }
     return render(request, 'category.html', context=context)
 
@@ -154,7 +156,7 @@ def brand_one_view(request, brand_slug):
     askers = Asker.objects.filter(priority=True)
     inf_infs = Asker.objects.filter(priority=False)
     brands = Brand.objects.filter(priority=True)
-    brands_all = Brand.objects.all()
+    brand_title = Brand.objects.get(slug=brand_slug)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -172,8 +174,8 @@ def brand_one_view(request, brand_slug):
         'askers': askers,
         'brands': brands,
         'inf_infs': inf_infs,
-        'brands_all': brands_all,
         'cart': cart,
+        'brand_title': brand_title,
     }
     return render(request, 'brand_one.html', context=context)
 
@@ -262,7 +264,7 @@ def history_orders_view(request):
     inf_infs = Asker.objects.filter(priority=False)
     askers = Asker.objects.filter(priority=True)
     cart = Cart.objects.first()
-    order = Order.objects.all()
+    order = Order.objects.filter(user=request.user)
     context = {
         'categories': categories,
         'infos': infos,
@@ -476,10 +478,11 @@ def make_order_view(request):
         last_name = form.cleaned_data['last_name']
         phone = form.cleaned_data['phone']
         buying_type = form.cleaned_data['buying_type']
-        address_true = form.cleaned_data['address_true']
         sail = form.cleaned_data['sail']
-        day_half = form.cleaned_data['day_half']
+        date_delivery = form.cleaned_data['date_delivery']
+        address_true = form.cleaned_data['address_true']
         comments = form.cleaned_data['comments']
+
         new_order = Order()
         new_order.user = request.user
         new_order.save()
@@ -487,10 +490,10 @@ def make_order_view(request):
         new_order.first_name = name
         new_order.last_name = last_name
         new_order.phone = phone
-        new_order.sail = sail
-        new_order.day_half = day_half
-        new_order.address = address_true
         new_order.buying_type = buying_type
+        new_order.sail = sail
+        new_order.date_delivery = date_delivery
+        new_order.address = address_true
         new_order.comments = comments
         new_order.total = cart.cart_total
         new_order.save()

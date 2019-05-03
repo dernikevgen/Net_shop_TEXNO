@@ -172,6 +172,8 @@ class Order(models.Model):
     address = models.CharField(max_length=120)
     buying_type = models.CharField(max_length=40, choices=(("Самовывоз", "Самовывоз"),
                                                            ("Доставка", "Доставка")), default="Доставка")
+    sail = models.CharField(max_length=40, choices=(("Наличными", "Наличными"),
+                                                    ("Картой", "Картой")), default="Наличными")
     date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField(blank=True)
     status = models.CharField(max_length=120, choices=ORDER_STATUS_CHOICES, default="Принят в обработку")
