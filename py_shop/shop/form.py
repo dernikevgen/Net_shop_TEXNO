@@ -24,6 +24,8 @@ class LoginForm(forms.Form):
 
 class RegistrationForm(forms.ModelForm):
 
+    name = forms.CharField(max_length=120, help_text='Required')
+    last_name = forms.CharField(max_length=120, help_text='Required')
     email = forms.EmailField(max_length=200, help_text='Required')
     password = forms.CharField(widget=forms.PasswordInput)
     password_check = forms.CharField(widget=forms.PasswordInput)
@@ -61,6 +63,8 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Этот никнейм уже занят.')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Пользователь с таким адресом уже зарегестрирвоан.')
+        if len(password) < 8:
+            raise forms.ValidationError('Пароль не может иметь меньше 8 символов')
         if password != password_check:
             raise forms.ValidationError('Пароли не совпадают.')
 
@@ -70,8 +74,12 @@ class OrderForm(forms.Form):
     name = forms.CharField(required=True)
     last_name = forms.CharField()
     phone = forms.CharField(max_length=13, required=True)
-    buying_type = forms.ChoiceField(widget=forms.Select(), choices=([("Доставка", "Доставка"), ("Самовывоз", "Самовывоз")]))
-    sail = forms.ChoiceField(widget=forms.Select(), choices=([("Наличными", "Наличными"), ("Картой", "Карточкой")]))
+    buying_type = forms.ChoiceField(widget=forms.Select(),
+                                    choices=([("Доставка", "Доставка"),
+                                              ("Самовывоз", "Самовывоз")]))
+    sail = forms.ChoiceField(widget=forms.Select(),
+                             choices=([("Наличными", "Наличными"),
+                                       ("Картой", "Карточкой")]))
     date_delivery = forms.DateField(widget=forms.SelectDateWidget(), initial=timezone.now())
     address_true = forms.CharField(required=False)
     comment = forms.CharField(widget=forms.Textarea, required=False)

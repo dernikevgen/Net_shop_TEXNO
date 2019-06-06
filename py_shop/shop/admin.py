@@ -4,7 +4,7 @@ from shop.models import ThemeFront, Category, Brand, Product, Info, Asker, Cart,
 
 class ProductAdmin(admin.ModelAdmin):
 
-    list_display = ['title', 'brand', 'category', 'created', 'updated', 'available', 'priority']
+    list_display = ['id', 'title', 'brand', 'category', 'created', 'updated', 'available', 'priority']
     list_filter = ['priority', 'brand__name', 'category__name']
     search_fields = ['title', 'brand__name']
 

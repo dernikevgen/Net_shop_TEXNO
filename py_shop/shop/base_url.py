@@ -9,7 +9,7 @@ from shop.views import order_create_view, make_order_view, history_orders_view, 
 
 
 urlpatterns = [
-    url(r'^$', views.base_view, name='base'),
+    url(r'^base/$', views.base_view, name='base'),
     url(r'^category_ever/$', category_all_view, name='category_ever'),
     url(r'^category/(?P<category_slug>[-\w]+)/$', category_view, name='category_detail'),
     url(r'^product/(?P<product_slug>[-\w]+)/$', product_view, name='product_detail'),
@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^cart/$', cart_base_view, name='cart'),
     url(r'^checkout/$', checkout_view, name='checkout'),
     url(r'^order/$', order_create_view, name='order'),
-    url(r'^thank_you/$', make_order_view, name='thank_you'),
+    url(r'^thank_you/', make_order_view, name='thank_you'),
     url(r'^history_orders/$', history_orders_view, name='history_orders'),
     url(r'^registration/$', registration_view, name='registration'),
     url(r'^logout/$', LogoutView.as_view(next_page=reverse_lazy('base')), name='logout'),

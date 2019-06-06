@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 <script src="{% static 'js/jquery.min.js' %}"></script>
-<div class="col-sm-4">
-    <img src="{{ product.image.url }}" style="width:auto; height:500px;">
+<div class="thumbnail">
+    <img src="{{ product.image.url }}" alt="" style='width:auto; height:500px;'>
 </div>
 <div class="cil-sm-4">
     <h3 class="text-center">{{ product.title }}</h3>

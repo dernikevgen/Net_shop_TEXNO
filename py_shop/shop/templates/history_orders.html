@@ -8,9 +8,10 @@
       border: none;
     }
 </style>
+<h1 class="text-center">История заказов пользователя {{ request.user }}</h1>
+<br>
 <table class="table" style="font-size:17px" border="2px" bgcolor="#89EC6A" align="center" >
     <thead>
-
     <tr style="background: lightblue">
         <th>Номер заказа</th>
         <th>Имя заказчика</th>
@@ -36,7 +37,8 @@
 {% else %}
 <div class="cil-sm-4">
     <p class="text-center" style="font-size:25px">Чтобы смотреть свою историю заказов, нужно
-        <a target="_blank" href="{% url 'registration' %}">войти</a>
+        <a target="_blank" href="{% url 'login' %}">войти</a> или
+        <a target="_blank" href="{% url 'registration' %}">зарегестрироваться</a>
     </p>
 </div>
 {% endif %}

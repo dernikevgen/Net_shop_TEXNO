@@ -6,23 +6,49 @@
     <h1 class="text-center">{{ category_title.name }}</h1>
     <hr>
     {% for product in product_of_category %}
-    <div class="col-sm-4">
-        <img src="{{ product.image.url }}" style="width:auto; height:350px;">
-        <p class=" lead text-center">
-            <a href="{{ product.get_absolute_url }}" class="text-center">{{ product.title }}</a>
-        </p>
-        <p class="text-center" style="font-size:18px;"> Цена: {{ product.price }}</p>
-        <p class="text-center">
-            {% if not request.user.is_authenticated %}
-            <p class="text-center" style="font-size:18px">Чтобы добавить товар, нужно
-                <a target="_blank" href="{% url 'registration' %}">войти</a>
+    <div class="col-sm-4 col-lg-4 col-md-4" >
+        <div class="thumbnail">
+            <img src="{{ product.image.url }}" alt="" style='width:auto; height:250px;'>
+            <div class="caption">
+                <h4 class="pull-right">{{ product.price}} руб</h4>
+                <h5>
+                    <strong>
+                        <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                    </strong>
+                </h5>
+                <style type="text/css">
+                    p.clip {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    padding: 10px;
+                    text-overflow: ellipsis;
+                    }
+                </style>
+                <p class="clip">{{ product.description}}</p>
+            </div>
+            <p class="text-center">
+                {% if not request.user.is_authenticated %}
+            <p class="text-center" style="font-size:15px">Чтобы добавить товар, нужно
+                <a target="_blank" href="{% url 'login' %}">войти</a> или
+                <a target="_blank" href="{% url 'registration' %}">зарегестрироваться</a>
             </p>
             {% else %}
             <a href="#" class='add_to_cart' data-slug='{{ product.slug }}' class="text-center">
                 <button class="btn-success">Добавить в корзину</button>
             </a>
             {% endif %}
-        </p>
+            </p>
+            <div class="ratings">
+                <p class="pull-right">15 reviews</p>
+                <p>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                </p>
+            </div>
+        </div>
     </div>
     <script>
     $(document).ready(function(){

@@ -3,7 +3,8 @@ from autoslug import AutoSlugField
 from django.urls import reverse
 from decimal import Decimal
 from django.conf import settings
-
+import string
+import random
 
 def image_folder(instance, filename):
     '''This is func load correct url_name image'''
@@ -161,8 +162,19 @@ ORDER_STATUS_CHOICES = (
 )
 
 
+def generate_string():
+    unique = [i for i in string.ascii_lowercase] + [str(i) for i in range(10)]
+    random.shuffle(unique)
+    unique_url = ''.join([random.choice(unique) for i in range(10)])
+    return unique_url
+
+
+unique_slug = generate_string()
+
+
 class Order(models.Model):
 
+    global unique_slug
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     items = models.ManyToManyField(Cart)
     total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
@@ -175,9 +187,12 @@ class Order(models.Model):
     sail = models.CharField(max_length=40, choices=(("Наличными", "Наличными"),
                                                     ("Картой", "Картой")), default="Наличными")
     date = models.DateTimeField(auto_now_add=True)
-    date_delivery = models.CharField(max_length=40)
+    date_delivery = models.CharField(max_length=40, blank=True)
     comment = models.TextField(blank=True)
     status = models.CharField(max_length=120, choices=ORDER_STATUS_CHOICES, default="Принят в обработку")
 
     def __str__(self):
         return f"Заказ под номером {str(self.id)}"
+
+
+

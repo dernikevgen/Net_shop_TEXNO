@@ -4,6 +4,14 @@
 <script src="{% static 'js/jquery.min.js' %}"></script>
 {% if cart.cart_total  == 0 %}
 <h1 class="text-center">Ваш заказ ещё не собран</h1>
+    {% if not request.user.is_authenticated %}
+    <div class="cil-sm-4">
+        <p class="text-center" style="font-size:25px">Чтобы собрать заказ нужно
+            <a target="_blank" href="{% url 'login' %}">войти</a> или
+            <a target="_blank" href="{% url 'registration' %}">зарегестрироваться</a>
+        </p>
+    </div>
+    {% endif %}
 {% else %}
 <h1 class="text-center">Ваш заказ</h1>
 {% endif %}
@@ -36,7 +44,6 @@
         </tr>
         </tbody>
 </table>
-
 <br>
 {% if cart.cart_total  == 0 %}
 <a href="{% url 'base' %}" class="pull-left" style="font-size:20px">

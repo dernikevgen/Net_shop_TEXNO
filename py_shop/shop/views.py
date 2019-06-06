@@ -6,15 +6,23 @@ from django.urls import reverse
 from django.contrib.auth import login, authenticate
 
 
+infos = Info.objects.all()
+askers = Asker.objects.filter(priority=True)
+inf_infs = Asker.objects.filter(priority=False)
+brands = Brand.objects.filter(priority=True)
+context_1 = {
+    'infos': infos,
+    'askers': askers,
+    'inf_infs': inf_infs,
+    'brands': brands,
+}
+
+
 def base_view(request):
-    '''базовая страница'''
-    categories = Category.objects.all()
+    '''Base page'''
+    categories = Category.objects.filter(priority=True)
     products = Product.objects.filter(priority=True)
     images = ThemeFront.objects.all()
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -29,24 +37,17 @@ def base_view(request):
         'categories': categories,
         'products': products,
         'images': images,
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'base.html', context=context)
 
 
 def product_view(request, product_slug):
-    '''страница товара'''
+    '''Page of product'''
     product = Product.objects.get(slug=product_slug)
     categories = Category.objects.filter(priority=True)
     products = Product.objects.all()
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -60,27 +61,20 @@ def product_view(request, product_slug):
     context = {
         'products': products,
         'product': product,
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'categories': categories,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'product.html', context=context)
 
 
 def category_view(request, category_slug):
-    '''страница определённой категории'''
+    '''Single category pages'''
     category = Category.objects.get(slug=category_slug)
     product_of_category = Product.objects.filter(category=category)
     products = Product.objects.all()
     categories = Category.objects.filter(priority=True)
     categories_all = Category.objects.all()
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     category_title = Category.objects.get(slug=category_slug)
     try:
         cart_id = request.session['cart_id']
@@ -94,68 +88,47 @@ def category_view(request, category_slug):
         cart = Cart.objects.get(id=cart_id)
     context = {
         'product_of_category': product_of_category,
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'categories_all': categories_all,
         'categories': categories,
         'products': products,
         'cart': cart,
         'category_title': category_title,
     }
+    context = {**context, **context_1}
     return render(request, 'category.html', context=context)
 
 
 def category_all_view(request):
-    '''страница всех категорий'''
+    '''Page of all catefories'''
     categories = Category.objects.all()
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     cart = Cart.objects.first()
     context = {
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'categories': categories,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'category_ever.html', context=context)
 
 
 def brand_view(request):
-    '''страница товаров определённого бренда'''
+    '''Single brand pages'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     brands_all = Brand.objects.all()
     cart = Cart.objects.first()
     context = {
         'categories': categories,
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'brands_all': brands_all,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'brands.html', context=context)
 
 
 def brand_one_view(request, brand_slug):
-    '''страница всех брендов'''
+    '''Page of all brands'''
     brand = Brand.objects.get(slug=brand_slug)
     product_of_brand = Product.objects.filter(brand=brand)
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     brand_title = Brand.objects.get(slug=brand_slug)
     try:
         cart_id = request.session['cart_id']
@@ -170,116 +143,84 @@ def brand_one_view(request, brand_slug):
     context = {
         'product_of_brand': product_of_brand,
         'categories': categories,
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'cart': cart,
         'brand_title': brand_title,
     }
+    context = {**context, **context_1}
     return render(request, 'brand_one.html', context=context)
 
 
 def repairs_view(request):
-    '''информация(сервис)'''
+    '''Info (service)'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    brands = Brand.objects.filter(priority=True)
     cart = Cart.objects.first()
     context = {
         'categories': categories,
-        'infos': infos,
-        'askers': askers,
-        'brands': brands,
-        'inf_infs': inf_infs,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'repairs.html', context=context)
 
 
 def asker_view_one(request):
-    '''информация (вопросы(1))'''
+    '''Info (askers(1))'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    askers = Asker.objects.filter(priority=True)
     cart = Cart.objects.first()
     context = {
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'asker_1.html', context=context)
 
 
 def asker_view_two(request):
-    '''информация (вопросы(2))'''
+    '''Info (askers(2))'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    askers = Asker.objects.filter(priority=True)
     cart = Cart.objects.first()
     context = {
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'asker_2.html', context=context)
 
 
 def target_view(request):
-    '''информация (о портале)'''
+    '''Info (about website)'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     cart = Cart.objects.first()
     context = {
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
         'cart': cart,
     }
+    context = {**context, **context_1}
     return render(request, 'target.html', context=context)
 
 
 def history_orders_view(request):
-    '''История заказов'''
+    '''History orders'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
-    askers = Asker.objects.filter(priority=True)
     cart = Cart.objects.first()
-    order = Order.objects.filter(user=request.user)
+    if request.user.is_active:
+        order = Order.objects.filter(user=request.user).order_by('id')
+        context = {
+            'categories': categories,
+            'cart': cart,
+            'order': order,
+        }
+        context = {**context, **context_1}
+        return render(request, 'history_orders.html', context=context)
     context = {
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
         'cart': cart,
-        'order': order,
     }
+    context = {**context, **context_1}
     return render(request, 'history_orders.html', context=context)
 
 
 def cart_base_view(request):
-    '''базовая страница корзины'''
-    '''страница корзины'''
+    '''Base page if cart'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -291,23 +232,16 @@ def cart_base_view(request):
         request.session['cart_id'] = cart_id
         cart = Cart.objects.get(id=cart_id)
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     context = {
         'cart': cart,
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
     }
+    context = {**context, **context_1}
     return render(request, 'cart.html', context=context)
 
 
 def add_to_cart(request):
-    '''добавление товара в корзину'''
+    '''Add product in cart'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -335,7 +269,7 @@ def add_to_cart(request):
 
 
 def remove_from_cart(request):
-    '''удаление товара из корзины'''
+    '''Delete product from cart'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -363,7 +297,7 @@ def remove_from_cart(request):
 
 
 def count_item_qty(request):
-    '''подсчёт суммы от кол-ва товаров и итоговой суммы корзины'''
+    '''Sum total and price on cart'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -381,14 +315,14 @@ def count_item_qty(request):
     return JsonResponse(
         {
             'cart_total': cart.items.count(),
-            'item_total': cart_item.item_total,
+            'item_total_final': cart_item.item_total,
             'cart_total_final': cart.cart_total,
         }
     )
 
 
 def checkout_view(request):
-    '''Страница предварительного заказа'''
+    '''Page pre order'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -400,23 +334,16 @@ def checkout_view(request):
         request.session['cart_id'] = cart_id
         cart = Cart.objects.get(id=cart_id)
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     context = {
         'cart': cart,
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
     }
+    context = {**context, **context_1}
     return render(request, 'checkout.html', context=context)
 
 
 def order_create_view(request):
-    '''оформления заказа'''
+    '''Registration order'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -429,24 +356,17 @@ def order_create_view(request):
         cart = Cart.objects.get(id=cart_id)
     form = OrderForm(request.POST or None)
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     context = {
         'form': form,
         'cart': cart,
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
     }
+    context = {**context, **context_1}
     return render(request, 'order.html', context=context)
 
 
 def make_order_view(request):
-    '''cтраница заказа'''
+    '''Page order'''
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -460,19 +380,12 @@ def make_order_view(request):
     form = OrderForm(request.POST or None)
     images = ThemeFront.objects.all()
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     context = {
         'cart': cart,
         'images': images,
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
     }
+    context = {**context, **context_1}
     if form.is_valid():
         name = form.cleaned_data['name']
         last_name = form.cleaned_data['last_name']
@@ -504,12 +417,8 @@ def make_order_view(request):
 
 
 def registration_view(request):
-    '''страница регестрации и входа'''
+    '''Registration and autentificate'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     form = RegistrationForm(request.POST or None)
     if form.is_valid():
         new_user = form.save(commit=False)
@@ -531,21 +440,14 @@ def registration_view(request):
     context = {
         'form': form,
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
     }
+    context = {**context, **context_1}
     return render(request, 'registration.html', context=context)
 
 
 def login_view(request):
-    '''Страница входа'''
+    '''Page autentificate'''
     categories = Category.objects.filter(priority=True)
-    infos = Info.objects.all()
-    brands = Brand.objects.filter(priority=True)
-    askers = Asker.objects.filter(priority=True)
-    inf_infs = Asker.objects.filter(priority=False)
     form = LoginForm(request.POST or None)
     if form.is_valid():
         username = form.cleaned_data['username']
@@ -557,11 +459,8 @@ def login_view(request):
     context = {
         'form': form,
         'categories': categories,
-        'infos': infos,
-        'brands': brands,
-        'inf_infs': inf_infs,
-        'askers': askers,
     }
+    context = {**context, **context_1}
     return render(request, 'login.html', context=context)
 
 
