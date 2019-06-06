@@ -11,7 +11,7 @@
 
 2)Активировать виртуальную среду в проекте
 
-2)Установить необходимые пакеты в виртуальную среду, указанные в файле  requirements.txt (shop_py2/py_shop/requirements.txt)
+2.2)Установить необходимые пакеты в виртуальную среду, указанные в файле  requirements.txt (shop_py2/py_shop/requirements.txt)
 с помощью командной строки в директории проекта (shop_py2/py_shop/)
 
 3)Cоздать аккаунт администратора командой("python manage.py createsuperuser")
